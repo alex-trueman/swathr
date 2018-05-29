@@ -1,0 +1,1 @@
+# `swathr`: Swath plots

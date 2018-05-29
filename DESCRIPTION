@@ -1,0 +1,21 @@
+Package: swathr
+Type: Package
+Title: Create swath plots of 3D spatial data
+Version: 0.1.0
+Author: Alex M Trueman
+Maintainer: Alex M Trueman <amt4158@gmail.com>
+Description: Swath plots are plots of the mean grade profile for a particular 
+    axis. They can be used to analyse trend in sample data or for validating 
+    block estimates against sample data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+    boot,
+    dplyr,
+    magrittr,
+    plyr,
+    purrr,
+    rlang,
+    tidyr
