@@ -16,7 +16,7 @@ base-r `cut` function.}
 an atomic vector of type double.
 }
 \description{
-Extract the midpoint of an interval assigned to a data frame.
+The mid-point is used as an attractive label for plot axes.
 }
 \author{
 Alex Trueman

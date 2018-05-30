@@ -15,12 +15,16 @@ swath_data(df, value, group, axis, slices)
 
 \item{axis}{Axis column for slicing (e.g., x).}
 
-\item{slices}{List of slice starting coordinates as numeric vector.
-Can be generated from function swath_seq.}
+\item{slices}{List of slice interval coordinates as numeric vector.
+Can be generated from function \code{swath_seq}.}
 }
 \value{
 data frame
 }
 \description{
-Generate means by geographical slices (swaths).
+For a given set of coordinate intervals calculate the mean of the data
+within each interval (swath).
+}
+\author{
+Alex M Trueman
 }

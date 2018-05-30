@@ -17,7 +17,7 @@ swath_data_ci(df, value, group, axis, slices, reps = 10000, conf = 0.95)
 \item{axis}{Axis column for slicing (e.g., x).}
 
 \item{slices}{List of slice starting coordinates as numeric vector.
-Can be generated from function swath_seq.}
+Can be generated from function \code{swath_seq}.}
 
 \item{reps}{(default = 10000) Number of bootstrap repetitions.}
 
@@ -27,9 +27,9 @@ Can be generated from function swath_seq.}
 dataframe
 }
 \description{
-Generate means by geographical slices (swaths).
-Extended to include lower and upper confidence limits by bootstrapping.
+For a given set of coordinate intervals calculate the mean of the data
+within each interval (swath).
 }
 \author{
-Alex M Trueman, 2018-05-08.
+Alex M Trueman
 }

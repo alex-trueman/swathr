@@ -24,9 +24,8 @@ BCa error occurs.}
 Dataframe with mean and confidence limits.
 }
 \description{
-Calculate mean and bootstrapped confidence limits using the bias corrected and
-accelarated (BCa) method, which is more robust with low sample numbers and
-non-normal distributions of bootstrapped means.
+Based on https://www.painblogr.org/2017-10-18-purrring-through-bootstraps
+by Peter Kamerman (@painblogR)
 }
 \examples{
 df <- data.frame(
@@ -38,8 +37,5 @@ boot_mean_ci(df, x, reps = 100, conf = 0.9, d)
 
 }
 \author{
-Alex M Trueman, 2018-05-08
-
-Based on https://www.painblogr.org/2017-10-18-purrring-through-bootstraps
-by Peter Kamerman (@painblogR)
+Alex M Trueman
 }

@@ -7,17 +7,22 @@
 swath_seq(axis, slice_size, block_inc)
 }
 \arguments{
-\item{axis}{is a vector of single axis coordinates (e.g., model$x).}
+\item{axis}{numeric vector of single axis coordinates (e.g., model$x).}
 
-\item{slice_size}{is the swath slice size for the axis.}
+\item{slice_size}{numeric swath slice size for the axis.}
 
-\item{block_inc}{is the size of parent blocks in the model used for rounding.}
+\item{block_inc}{numeric size of parent blocks in the model.
+The minimum and maximum coordinate of slicing is rounded to the
+nearest \code{block_inc}.}
 }
 \value{
-a numeric vecotor with a sequence of slice coordinates.
+numeric vector with a sequence of slice coordinates.
 }
 \description{
-Create a sequence of swath intervals for a given axis and increment size.
+Swath statistics are generated for slices through the spatial data.
+\code{swath_seq} generates slice intervals based on some input spatial
+data, a block size, and slice width.
+'
 }
 \author{
 Alex Trueman
