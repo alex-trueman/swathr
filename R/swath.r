@@ -1,25 +1,37 @@
 #' Create a sequence of swath intervals for a given axis and increment size.
 #'
+#' Swath statistics are generated for slices through the spatial data.
+#' \code{swath_seq} generates slice intervals based on some input spatial
+#' data, a block size, and slice width.
+#''
 #' @author Alex Trueman
-#' @param axis is a vector of single axis coordinates (e.g., model$x).
-#' @param slice_size is the swath slice size for the axis.
-#' @param block_inc is the size of parent blocks in the model used for rounding.
+#' @param axis numeric vector of single axis coordinates (e.g., model$x).
+#' @param slice_size numeric swath slice size for the axis.
+#' @param block_inc numeric size of parent blocks in the model.
+#'    The minimum and maximum coordinate of slicing is rounded to the
+#'    nearest \code{block_inc}.
 #'
-#' @return a numeric vecotor with a sequence of slice coordinates.
+#' @return numeric vector with a sequence of slice coordinates.
 #' @export
 #' @importFrom plyr round_any
+#'
 swath_seq <- function(axis, slice_size, block_inc) {
 
-    # Calculate number of slices based on range of the axis.
-    sl_num <- round(round_any(max(axis) - min(axis), block_inc) / slice_size) + 1
+  # Calculate number of slices based on range of the axis.
+  sl_num <- round(round_any(max(axis) - min(axis), block_inc) / slice_size) + 1
 
-    sl_min <- round_any(min(axis) - slice_size, block_inc)
-    sl_max <- sl_min + (slice_size * sl_num)
+  # Calculate minimum and maximum slice.
+  sl_min <- round_any(min(axis) - slice_size, block_inc)
+  sl_max <- sl_min + (slice_size * sl_num)
 
-    return(as.numeric(seq(sl_min, sl_max, slice_size)))
+  # Return numeric sequence of intervals.
+  return(as.numeric(seq(sl_min, sl_max, slice_size))
+
 }
 
 #' Extract the midpoint of an interval assigned to a data frame.
+#'
+#' The mid-point is used as an attractive label for plot axes.
 #'
 #' @author Alex Trueman
 #' @param x is a data-frame column with intervals typically applied using the
@@ -28,20 +40,28 @@ swath_seq <- function(axis, slice_size, block_inc) {
 #'
 #' @return an atomic vector of type double.
 interval_mid <- function(x, dp = 1) {
-    lower <- as.double(gsub(",.*", "", gsub("\\(|\\[|\\)|\\]", "", x)))
-    upper <- as.double(gsub(".*,", "", gsub("\\(|\\[|\\)|\\]", "", x)))
 
-    return(as.double(round(lower + (upper - lower) / 2, dp)))
+  # Extract lower and upper bounds of the intervals.
+  lower <- as.double(gsub(",.*", "", gsub("\\(|\\[|\\)|\\]", "", x)))
+  upper <- as.double(gsub(".*,", "", gsub("\\(|\\[|\\)|\\]", "", x)))
+
+  # Return midpoint.
+  return(as.double(round(lower + (upper - lower) / 2, dp)))
+
 }
 
 #' Generate means by geographical slices (swaths).
+#'
+#' For a given set of coordinate intervals calculate the mean of the data
+#' within each interval (swath).
+#' @author Alex M Trueman
 #'
 #' @param df Data frame with at least one coordinate field.
 #' @param value Grade column being evaluated.
 #' @param group Grouping column (e.g., domain).
 #' @param axis Axis column for slicing (e.g., x).
-#' @param slices List of slice starting coordinates as numeric vector.
-#'   Can be generated from function swath_seq.
+#' @param slices List of slice interval coordinates as numeric vector.
+#'    Can be generated from function \code{swath_seq}.
 #'
 #' @return data frame
 #' @export
@@ -55,24 +75,22 @@ swath_data <- function(df, value, group, axis, slices) {
     axis <- enquo(axis)
 
     # Generate swath data by group and slice.
-    d <- df %>%
+    df %>%
         group_by(!! group, slice = interval_mid(cut(!! axis, slices), 1)) %>%
         filter(!is.na(slice)) %>%
         summarise(n = n(), statistic = mean(!! value, na.rm = TRUE)) %>%
         select(!! group, slice, n, statistic) %>%
         arrange(!! group, slice)
 
-    return(d)
-
 }
 
 #' Calculate mean and bootstrapped confidence limits using the bias corrected and
 #' accelarated (BCa) method, which is more robust with low sample numbers and
 #' non-normal distributions of bootstrapped means.
-#' @author Alex M Trueman, 2018-05-08
 #'
 #' Based on https://www.painblogr.org/2017-10-18-purrring-through-bootstraps
 #' by Peter Kamerman (@painblogR)
+#' @author Alex M Trueman
 #'
 #' @param df Dataframe containing grouping and value fields.
 #' @param value Value field for statistics.
@@ -139,14 +157,17 @@ boot_mean_ci <- function(df, value, reps, conf, ...) {
 
 #' Generate means by geographical slices (swaths).
 #' Extended to include lower and upper confidence limits by bootstrapping.
-#' @author Alex M Trueman, 2018-05-08.
 #'
+#' For a given set of coordinate intervals calculate the mean of the data
+#' within each interval (swath).
+#'
+#' @author Alex M Trueman
 #' @param df Data frame with at least one coordinate field.
 #' @param value Column name to be evaluated (e.g., au).
 #' @param group Grouping column (e.g., domain).
 #' @param axis Axis column for slicing (e.g., x).
 #' @param slices List of slice starting coordinates as numeric vector.
-#'               Can be generated from function swath_seq.
+#'    Can be generated from function \code{swath_seq}.
 #' @param reps (default = 10000) Number of bootstrap repetitions.
 #' @param conf (default = 0.95) Confidence level.
 #'
