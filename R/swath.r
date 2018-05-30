@@ -25,7 +25,7 @@ swath_seq <- function(axis, slice_size, block_inc) {
   sl_max <- sl_min + (slice_size * sl_num)
 
   # Return numeric sequence of intervals.
-  return(as.numeric(seq(sl_min, sl_max, slice_size))
+  return(as.numeric(seq(sl_min, sl_max, slice_size)))
 
 }
 
