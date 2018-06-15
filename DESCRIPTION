@@ -7,6 +7,8 @@ Maintainer: Alex M Trueman <amt4158@gmail.com>
 Description: Swath plots are plots of the mean grade profile for a particular
     axis. They can be used to analyse trend in sample data or for validating
     block estimates against sample data.
+URL: https://github.com/truemoid/swathr
+BugReports: https://github.com/truemoid/swathr
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
