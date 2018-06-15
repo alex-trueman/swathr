@@ -19,5 +19,5 @@ an atomic vector of type double.
 The mid-point is used as an attractive label for plot axes.
 }
 \author{
-Alex Trueman
+Alex M Trueman
 }
