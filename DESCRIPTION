@@ -1,7 +1,7 @@
 Package: swathr
 Type: Package
 Title: Create swath plots of 3D spatial data
-Version: 0.1.0
+Version: 0.1.2
 Author: Alex M Trueman
 Maintainer: Alex M Trueman <amt4158@gmail.com>
 Description: Swath plots are plots of the mean grade profile for a particular
