@@ -33,12 +33,14 @@ swath_seq <- function(axis, slice_size, block_inc) {
 #'
 #' The mid-point is used as an attractive label for plot axes.
 #'
-#' @author Alex Trueman
+#' @author Alex M Trueman
+#'
 #' @param x is a data-frame column with intervals typically applied using the
 #'   base-r `cut` function.
 #' @param dp is the number of decimal places for the base-r `round` function.
 #'
 #' @return an atomic vector of type double.
+#' @export
 interval_mid <- function(x, dp = 1) {
 
   # Extract lower and upper bounds of the intervals.
@@ -65,7 +67,7 @@ interval_mid <- function(x, dp = 1) {
 #'
 #' @return data frame
 #' @export
-#' @import dplyr
+#' @importFrom dplyr arrange filter group_by select summarise
 #' @importFrom magrittr %>%
 #' @importFrom rlang enquo
 swath_data <- function(df, value, group, axis, slices) {
@@ -102,11 +104,13 @@ swath_data <- function(df, value, group, axis, slices) {
 #'
 #' @return dataframe
 #' @export
-#' @import dplyr
+#' @importFrom dplyr arrange filter group_by left_join mutate summarise ungroup
 #' @importFrom magrittr %>%
 #' @importFrom rlang enquo quo_name UQ
 #' @importFrom mstats boot_mean_ci
-swath_data_ci <- function(df, value, group, axis, slices, reps = 10000, conf = 0.95) {
+swath_data_ci <- function(
+    df, value, group, axis, slices, reps = 10000, conf = 0.95
+    ) {
 
     # Set up passed arguments.
     value <- enquo(value)
@@ -118,13 +122,16 @@ swath_data_ci <- function(df, value, group, axis, slices, reps = 10000, conf = 0
     d <- df %>%
         mutate(slice = interval_mid(cut(!! axis, slices), 1)) %>%
         group_by(!! group, slice) %>%
-        mutate(n = n(), isunique = length(unique(!! value))) %>% # Count unique values per group.
+        mutate(n = n(), isunique = length(unique(!! value))) %>% # Count unique
+        # values per group.
         ungroup() %>%
-        filter(n > 1, isunique > 1) # Make sure each group has more than 1 unique value
-    # otherwise the boot.ci will fail with error.
+        filter(n > 1, isunique > 1) # Make sure each group has more than 1
+        # unique value otherwise the boot.ci will fail with error.
 
     # Bootstrap for confidence intervals.
-    mci <- boot_mean_ci(d, UQ(value), reps = reps, conf = conf, UQ(group), slice)
+    mci <- boot_mean_ci(
+        d, UQ(value), reps = reps, conf = conf, UQ(group), slice
+        )
 
     # Join dataframes for plotting.
     fin <- d %>%
